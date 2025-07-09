@@ -1,0 +1,106 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.project_description }}"
+authors = [
+    {name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}"}
+]
+license = {text = "{{ cookiecutter.license }}"}
+readme = "README.md"
+requires-python = ">={{ cookiecutter.python_version }}"
+classifiers = [
+    "Private :: Do Not Upload"  # Prevents accidental uploads to PyPI
+]
+
+keywords = {{ cookiecutter.keywords | tojson }}
+
+dependencies = [
+    "fastmcp>=0.1.0",
+    "pydantic"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "pre-commit>=3.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+]
+
+[project.urls]
+Homepage = "{{ cookiecutter.homepage_url }}"
+Repository = "{{ cookiecutter.repository_url }}"
+Documentation = "{{ cookiecutter.repository_url }}"
+Issues = "{{ cookiecutter.support_url }}"
+
+[project.scripts]
+{{ cookiecutter.project_slug.replace('-', '_') }} = "server.main:main"
+
+[tool.setuptools]
+packages = ["server"]
+
+[project.scripts]
+bundle-deps = "python:install_deps"
+
+# Custom scripts section for DXT development
+[tool.dxt]
+bundle = "pip install \"mcp[all]\" --target server/lib --upgrade --force-reinstall"
+test = "python server/main.py --debug"
+pack = "npx @anthropic-ai/dxt pack"
+
+# Ruff configuration
+[tool.ruff]
+target-version = "py{{ cookiecutter.python_version.replace('.', '') }}"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = [
+    "ERA001",  # don't remove commented out code
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.isort]
+combine-as-imports = true
+known-first-party = ["server"]
+
+
+[tool.ruff.per-file-ignores]
+"tests/**/*" = [
+    "ARG",     # unused function args -> fixtures nevertheless are functionally relevant
+    "FBT",     # don't care about booleans as positional arguments in tests
+    "PLR2004", # magic values in tests are fine
+    "S101",    # asserts allowed in tests
+    "TID252",  # relative imports allowed in tests
+]
+
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["server"]
+omit = [
+    "tests/*",
+    "venv/*",
+    ".venv/*",
+    "*/site-packages/*",
+]

@@ -1,0 +1,41 @@
+{
+  "dxt_version": "0.1",
+  "name": "{{ cookiecutter.project_slug }}",
+  "display_name": "{{ cookiecutter.project_name }}",
+  "version": "{{ cookiecutter.version }}",
+  "description": "{{ cookiecutter.project_description }}",
+  "long_description": "{{ cookiecutter.project_description }}",
+  "author": {
+    "name": "{{ cookiecutter.author_name }}",
+    "email": "{{ cookiecutter.author_email }}",
+    "url": "{{ cookiecutter.author_url }}"
+  },
+  "license": "{{ cookiecutter.license }}",
+  "homepage": "{{ cookiecutter.homepage_url }}",
+  "repository": {
+    "type": "git",
+    "url": "{{ cookiecutter.repository_url }}"
+  },
+  "support": "{{ cookiecutter.support_url }}",
+  "keywords": "{{ cookiecutter.keywords | tojson }}",
+  "server": {
+    "type": "python",
+    "entry_point": "server/main.py",
+    "mcp_config": {
+      "command": "python",
+      "args": ["${__dirname}/server/main.py"]
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["macos", "windows", "linux"],
+    "python": ">={{ cookiecutter.python_version }}"
+  },
+  "tools": [
+    {
+      "name": "add",
+      "description": "Adds two integer numbers together."
+    }
+  ],
+  ""
+}
